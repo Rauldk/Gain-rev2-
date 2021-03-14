@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Analyser.h"
 
 class Visualiser : public juce::AudioVisualiserComponent
 {
@@ -32,10 +33,12 @@ public:
     Gainrev2AudioProcessor();
     ~Gainrev2AudioProcessor() override;
 
-
+    void createAnalyserPlot(juce::Path& p, const juce::Rectangle<int> bounds, float minFreq, bool input);
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
+
+    bool checkForNewAnalyserData();
 
    #ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
@@ -69,7 +72,12 @@ public:
     float mGain{ 0.5 };
     Visualiser visualiser;
 
+    
+
 private:
+
+    Analyser<float> mAnalyserInput;
+    Analyser<float> mAnalyserOutput;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gainrev2AudioProcessor)
 };

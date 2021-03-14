@@ -13,6 +13,9 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="UUmGUQ" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="zAzasb" name="Analyser.h" compile="0" resource="0" file="Source/Analyser.h"/>
+    <FILE id="QGwPgx" name="BandEditor.h" compile="0" resource="0" file="Source/BandEditor.h"/>
+    <FILE id="MsMuHw" name="Spectrogram.h" compile="0" resource="0" file="Source/Spectrogram.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
@@ -34,6 +37,7 @@
         <MODULEPATH id="juce_graphics" path="../../../../../Program Files/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../../../../Program Files/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../../../Program Files/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../Program Files/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
   </EXPORTFORMATS>
@@ -47,6 +51,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

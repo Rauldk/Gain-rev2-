@@ -8,6 +8,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Analyser.h"
+
 
 //==============================================================================
 Gainrev2AudioProcessor::Gainrev2AudioProcessor()
@@ -26,6 +28,8 @@ Gainrev2AudioProcessor::Gainrev2AudioProcessor()
 
 Gainrev2AudioProcessor::~Gainrev2AudioProcessor()
 {
+    mAnalyserInput.stopThread(1000);
+    mAnalyserOutput.stopThread(1000);
 }
 
 //==============================================================================
@@ -96,13 +100,17 @@ void Gainrev2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 
-    visualiser.clear();
-    
+
+    //visualiser.clear();
+    mAnalyserInput.setupAnalyser(int(sampleRate), float(sampleRate));
+    mAnalyserOutput.setupAnalyser(int(sampleRate), float(sampleRate));
     
 }
 
 void Gainrev2AudioProcessor::releaseResources()
 {
+    mAnalyserInput.stopThread(1000);
+    mAnalyserOutput.stopThread(1000);
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
@@ -139,6 +147,8 @@ void Gainrev2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    if (getActiveEditor() != nullptr)
+        mAnalyserInput.addAudioData(buffer, 0, totalNumInputChannels);
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -157,6 +167,7 @@ void Gainrev2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
+        const auto readPointer = buffer.getReadPointer(channel);
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
@@ -166,6 +177,21 @@ void Gainrev2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         // ..do something to the data...
         visualiser.pushBuffer(buffer);
     }
+    if(getActiveEditor()!= nullptr)
+        mAnalyserOutput.addAudioData(buffer,0,totalNumOutputChannels);
+}
+
+void Gainrev2AudioProcessor::createAnalyserPlot(juce::Path& p, const juce::Rectangle<int> bounds, float minFreq, bool input)
+{
+    if (input)
+        mAnalyserInput.createPath(p, bounds.toFloat(), minFreq);
+    else
+        mAnalyserOutput.createPath(p, bounds.toFloat(), minFreq);
+}
+
+bool Gainrev2AudioProcessor::checkForNewAnalyserData()
+{
+    return mAnalyserInput.checkDataAvailable() || mAnalyserOutput.checkDataAvailable();
 }
 
 //==============================================================================
