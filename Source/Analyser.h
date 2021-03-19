@@ -40,7 +40,7 @@ public:
     //==============================================================================
     Analyser() : Thread("Spectrum Analyser")
     {
-
+        mAvger.clear();
     }
 
     virtual ~Analyser() = default;
@@ -74,7 +74,7 @@ public:
         mAudioFifo.setSize(1, audioFifoSize);
         mAbstractFifo.setTotalSize(audioFifoSize);
 
-        startThread(7);
+        startThread(5);
     }
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -128,7 +128,7 @@ public:
     void createPath(juce::Path& p, const juce::Rectangle<float> bounds, float minFreq)
     {
         p.clear();
-        p.preallocateSpace(8 + mAvger.getNumSamples() * 3);
+        p.preallocateSpace(8 + mAvger.getNumSamples() * 20);
 
         juce::ScopedLock lockedforReading(mPathCreationLock);
         const auto* fftData = mAvger.getReadPointer(0);
@@ -148,7 +148,7 @@ private:
 
     inline float binToY(float bin, const juce::Rectangle<float> bounds) const
     {
-        const float infinity = -80.0f;
+        const float infinity = -100.0f;
         return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 0.0f, bounds.getBottom(), bounds.getY());
     }
     //[UserVariables]   -- You can add your own custom variables in this section.

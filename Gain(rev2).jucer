@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="KBf6wX" name="Gain(rev2)" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginFormats="buildVST3">
+              pluginFormats="buildVST3" pluginVST3Category="Analyzer,Fx">
   <MAINGROUP id="CRiYHJ" name="Gain(rev2)">
     <GROUP id="{7216D02C-CAD9-FB79-F2D3-66332ACB27E5}" name="Source">
       <FILE id="hfksce" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -15,13 +15,12 @@
     </GROUP>
     <FILE id="zAzasb" name="Analyser.h" compile="0" resource="0" file="Source/Analyser.h"/>
     <FILE id="QGwPgx" name="BandEditor.h" compile="0" resource="0" file="Source/BandEditor.h"/>
-    <FILE id="MsMuHw" name="Spectrogram.h" compile="0" resource="0" file="Source/Spectrogram.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="Gain(rev2)"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Gain(rev2)" enablePluginBinaryCopyStep="1"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="Gain(rev2)"/>
       </CONFIGURATIONS>
       <MODULEPATHS>

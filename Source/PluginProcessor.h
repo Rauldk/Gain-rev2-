@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "Analyser.h"
 
+
 class Visualiser : public juce::AudioVisualiserComponent
 {
 public:
@@ -26,13 +27,16 @@ public:
 //==============================================================================
 /**
 */
-class Gainrev2AudioProcessor  : public juce::AudioProcessor
+class Gainrev2AudioProcessor  : public juce::AudioProcessor,
+                                public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
     Gainrev2AudioProcessor();
     ~Gainrev2AudioProcessor() override;
 
+
+    void createFrequencyPlot(juce::Path& p, const std::vector<double>& mags, const juce::Rectangle<int> bounds, float pixelsPerDouble);
     void createAnalyserPlot(juce::Path& p, const juce::Rectangle<int> bounds, float minFreq, bool input);
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;

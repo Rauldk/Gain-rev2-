@@ -20,24 +20,29 @@ Gainrev2AudioProcessorEditor::Gainrev2AudioProcessorEditor (Gainrev2AudioProcess
     // editor's size to whatever you need it to be.
     mGainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mGainSlider.setRange(-60.0f, 0.0f, 0.01f);
-    mGainSlider.setValue(-20.0f);
+    mGainSlider.setValue(0.0f);
     mGainSlider.addListener(this);
     
     mGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
 
-   // addAndMakeVisible(mSpectrum);
+    // addAndMakeVisible(mSpectrum);
     addAndMakeVisible(mGainSlider);
     addAndMakeVisible(mFrame);
     
-   // updateFreqRespone();
+    // updateFreqRespone();
 
-
+    //audioProcessor.addChangeListener(this);
     setSize (1280, 720);
+    
+    juce::Timer::startTimerHz(30);
     
 }
 
 Gainrev2AudioProcessorEditor::~Gainrev2AudioProcessorEditor()
 {
+    //juce::PopupMenu::dismissAllActiveMenus();
+    //audioProcessor.removeChangeListener(this);
+    
 }
 
 //==============================================================================
@@ -67,7 +72,7 @@ void Gainrev2AudioProcessorEditor::resized()
     //visualiser.setBounds(0, 110, getWidth() - 100, 200);
     //mSpectrum.setBounds(0, 0, getWidth(), getHeight());
     
-    mPlotFrame = getLocalBounds().reduced(3, 3);
+    mPlotFrame = getLocalBounds().reduced(100, 100);
     
 }
 
