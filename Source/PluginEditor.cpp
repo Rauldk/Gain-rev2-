@@ -72,7 +72,7 @@ void Gainrev2AudioProcessorEditor::resized()
     //visualiser.setBounds(0, 110, getWidth() - 100, 200);
     //mSpectrum.setBounds(0, 0, getWidth(), getHeight());
     
-    mPlotFrame = getLocalBounds().reduced(100, 100);
+    mPlotFrame = getLocalBounds();
     
 }
 
