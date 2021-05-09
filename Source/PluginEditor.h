@@ -12,8 +12,6 @@
 #include "PluginProcessor.h"
 #include "BandEditor.h"
 
-
-
 //==============================================================================
 /**
 */
@@ -32,8 +30,17 @@ public:
     void resized() override;
 
     void sliderValueChanged(juce::Slider* slider) override;
+
     void changeListenerCallback(juce::ChangeBroadcaster* sender) override;
     void timerCallback() override;
+
+    void mouseDown(const juce::MouseEvent& event) override;
+
+    void mouseMove(const juce::MouseEvent& event) override;
+    void mouseDrag(const juce::MouseEvent& event) override;
+
+    void mouseDoubleClick(const juce::MouseEvent& event) override;
+    
 
 private:
 
@@ -42,9 +49,12 @@ private:
     static float getFreqPos(float freq);
     static float getPosForFreq(float pos);
 
+    static float getPosForGain(float gain, float top, float bottom);
+    static float getGainForPos(float pos, float top, float bottom);
+
 
     juce::Slider mGainSlider;
-    //BandEditor mSpectrum;
+
     juce::GroupComponent mFrame;
     juce::Rectangle<int> mPlotFrame;
     juce::Rectangle<int> mBrandingFrame;
@@ -52,8 +62,23 @@ private:
     juce::Path mFrequencyResponse;
     juce::Path mAnalyserPath;
 
+    juce::OwnedArray<BandEditor> mBandEditor;
+
+    int mDraggingBand = -1;
+    bool mDraggingGain = false;
+
+    juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> mAttachments;
+    juce::SharedResourcePointer<juce::TooltipWindow> mTooltipWindow;
+
+    juce::PopupMenu mContextMenu;
+
     Gainrev2AudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gainrev2AudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Gainrev2AudioProcessorEditor)
+
+#ifdef JUCE_OPENGL
+        juce::OpenGLContext openGLContext;
+#endif // JUCE_OPENGL
+
 };
 

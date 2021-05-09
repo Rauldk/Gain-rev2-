@@ -23,45 +23,45 @@
 #include <JuceHeader.h>
 
 
-
 //[/Headers]
 //enum TraceType
 //{
 //    Magnitude,
 //    Phase
 //};
-struct mPoint2D
-{
-	int x;
-	int y;
-};
-struct mSpline
-{
-	std::vector<mPoint2D> points;
 
-	mPoint2D getSplinePoint(float t) {
-		int p0, p1, p2, p3;
-		p1 = (int)t + 1;
-		p2 = p1 + 1;
-		p3 = p2 + 1;
-		p0 = p1 - 1;
-
-		t = t - (int)t;
-
-		int tt = t * t;
-		int ttt = tt * t;
-
-		int q1 = -ttt + 2 * tt - t;
-		int q2 = 3.0f * ttt - 5.0f * tt + 2.0f;
-		int q3 = -3.0f * ttt + 4.0f * tt + t;
-		int q4 = ttt - tt;
-
-		int tX = 0.5f * (points[p0].x * q1 + points[p1].x * q2 + points[p2].x * q3 + points[p3].x * q4);
-		int tY = 0.5f * (points[p0].y * q1 + points[p1].y * q2 + points[p2].y * q3 + points[p3].y * q4);
-
-		return { tX, tY };
-	}
-};
+//struct mPoint2D
+//{
+//	int x;
+//	int y;
+//};
+//struct mSpline
+//{
+//	std::vector<mPoint2D> points;
+//
+//	mPoint2D getSplinePoint(float t) {
+//		int p0, p1, p2, p3;
+//		p1 = (int)t + 1;
+//		p2 = p1 + 1;
+//		p3 = p2 + 1;
+//		p0 = p1 - 1;
+//
+//		t = t - (int)t;
+//
+//		int tt = t * t;
+//		int ttt = tt * t;
+//
+//		int q1 = -ttt + 2 * tt - t;
+//		int q2 = 3.0f * ttt - 5.0f * tt + 2.0f;
+//		int q3 = -3.0f * ttt + 4.0f * tt + t;
+//		int q4 = ttt - tt;
+//
+//		int tX = 0.5f * (points[p0].x * q1 + points[p1].x * q2 + points[p2].x * q3 + points[p3].x * q4);
+//		int tY = 0.5f * (points[p0].y * q1 + points[p1].y * q2 + points[p2].y * q3 + points[p3].y * q4);
+//
+//		return { tX, tY };
+//	}
+//};
 
 
 
@@ -188,13 +188,19 @@ public:
 
 		//getWidth doesnt actually have enough values to draw to the very end of the component
 		//might be because of something in indexToX
-		for (int i = 0; i <= /*bounds.getWidth()*/mAvger.getNumSamples(); i = i + 12) {
+		
 			//mPoint2D pos = mPath.getSplinePoint(i);
 			
 			//p.lineTo(bounds.getX() + factor * indexToX(i, minFreq), binToY(fftData[i], bounds));
-			p.cubicTo(bounds.getX() + factor * indexToX(i - 8, minFreq), binToY(fftData[i - 8], bounds),
-				bounds.getX() + factor * indexToX(i - 4, minFreq), binToY(fftData[i - 4], bounds),
-				bounds.getX() + factor * indexToX(i, minFreq), binToY(fftData[i], bounds));
+		for (int i = 0; i <= 96; i += 6) {
+			p.cubicTo(bounds.getX() + factor * indexToX(i , minFreq), binToY(fftData[i ], bounds),
+				bounds.getX() + factor * indexToX(i + 2, minFreq), binToY(fftData[i + 2], bounds),
+				bounds.getX() + factor * indexToX(i +4, minFreq), binToY(fftData[i+ 4], bounds));
+		}
+		for (int i = 96; i <= mAvger.getNumSamples(); i += 12) {
+			p.cubicTo(bounds.getX() + factor * indexToX(i, minFreq), binToY(fftData[i], bounds),
+				bounds.getX() + factor * indexToX(i + 4, minFreq), binToY(fftData[i + 4], bounds),
+				bounds.getX() + factor * indexToX(i + 8, minFreq), binToY(fftData[i + 8], bounds));
 		}
 		//for (int i = 200; i < bounds.getWidth()/*mAvger.getNumSamples()*/; i=i+90) {
 		//	//mPoint2D pos = mPath.getSplinePoint(i);
@@ -217,9 +223,9 @@ private:
 
 	inline float binToY(float bin, const juce::Rectangle<float> bounds) const
 	{
-		const float infinity = -110.0f;
+		const float infinity = -100.0f;
 		//figure out the straight line at 0.0f
-		return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 0.0f, bounds.getBottom()-100, bounds.getY()); 
+		return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 10.0f, bounds.getBottom()-100, bounds.getY()); 
 	}
 	//[UserVariables]   -- You can add your own custom variables in this section.
 	//[/UserVariables]
@@ -244,7 +250,7 @@ private:
 
 	juce::CriticalSection mPathCreationLock;
 
-	mSpline mPath;
+	//mSpline mPath;
 	/*TraceType mTraceType = Magnitude;
 	int numHorizontalLines = 7;
 	float maxDB = 6;*/
