@@ -12,17 +12,17 @@
 #include "Analyser.h"
 
 
-class Visualiser : public juce::AudioVisualiserComponent
-{
-public:
-	Visualiser() : juce::AudioVisualiserComponent(2)
-	{
-		setBufferSize(512);
-		setSamplesPerBlock(256);
-		setColours(juce::Colours::black, juce::Colours::indianred);
-	}
-
-};
+//class Visualiser : public juce::AudioVisualiserComponent
+//{
+//public:
+//	Visualiser() : juce::AudioVisualiserComponent(2)
+//	{
+//		setBufferSize(512);
+//		setSamplesPerBlock(256);
+//		setColours(juce::Colours::black, juce::Colours::indianred);
+//	}
+//
+//};
 
 //==============================================================================
 /**
@@ -122,8 +122,8 @@ public:
 	juce::Point<int> getSavedSize() const;
 	void setSavedSize(const juce::Point<int>& size);
 
-	float mGain{ 0.5f };
-	Visualiser visualiser;
+	/*float mGain{ 0.5f };
+	Visualiser visualiser;*/
 
 	struct Band {
 		Band(const juce::String& nameToUse, juce::Colour colourToUse, enum FilterType typeToUse,
@@ -171,9 +171,9 @@ private:
 
 	bool mWasBypassed = true;
 	
-	using filterBand = juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>;
-	using gain = juce::dsp::Gain<float>;
-	juce::dsp::ProcessorChain<filterBand, filterBand, filterBand, filterBand, filterBand, filterBand, gain> mFilter;
+	using FilterBand = juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>;
+	using Gain = juce::dsp::Gain<float>;
+	juce::dsp::ProcessorChain<FilterBand, FilterBand, FilterBand, FilterBand, FilterBand, FilterBand, Gain> mFilter;
 
 	double mSampleRate = 0;
 

@@ -16,7 +16,7 @@
 /**
 */
 class Gainrev2AudioProcessorEditor  : public juce::AudioProcessorEditor, 
-                                      public juce::Slider::Listener,
+                                      //public juce::Slider::Listener,
                                       public juce::ChangeListener,
                                       public juce::Timer
     
@@ -29,7 +29,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void sliderValueChanged(juce::Slider* slider) override;
+    //void sliderValueChanged(juce::Slider* slider) override;
 
     void changeListenerCallback(juce::ChangeBroadcaster* sender) override;
     void timerCallback() override;
@@ -53,7 +53,7 @@ private:
     static float getGainForPos(float pos, float top, float bottom);
 
 
-    juce::Slider mGainSlider;
+    juce::Slider mGainSlider{ juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow }; 
 
     juce::GroupComponent mFrame;
     juce::Rectangle<int> mPlotFrame;

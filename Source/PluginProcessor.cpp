@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Analyser.h"
+#include "BandEditor.h"
 
 juce::String Gainrev2AudioProcessor::paramOutput("output");
 juce::String Gainrev2AudioProcessor::paramType("type");
@@ -60,7 +61,7 @@ std::vector<Gainrev2AudioProcessor::Band> createDefaultBands() //replace TRANS w
 {
 	std::vector<Gainrev2AudioProcessor::Band> defaults;
 
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Lowest"), juce::Colours::blue, Gainrev2AudioProcessor::HighPass, 20.0f, 0.707f)); //why 0.707f??
+	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Lowest"), juce::Colours::antiquewhite, Gainrev2AudioProcessor::HighPass, 30.0f, 0.707f)); //why 0.707f??
 	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Low"), juce::Colours::brown, Gainrev2AudioProcessor::LowShelf, 250.0f, 0.707f));
 	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Low Mids"), juce::Colours::green, Gainrev2AudioProcessor::Peak, 500.0f, 0.707f));
 	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("High Mids"), juce::Colours::coral, Gainrev2AudioProcessor::Peak, 1000.0f, 0.707f));
@@ -107,11 +108,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 			defaults[i].frequency,
 			juce::String(),
 			juce::AudioProcessorParameter::genericParameter,
-			[](float value, int) { return (value < 1000) ?
+			[](float value, int) { return (value < 1000.0f) ?
 			juce::String(value, 0) + "Hz" :
-			juce::String(value / 1000.0, 2) + " kHz"; },
+			juce::String(value / 1000.0f, 2) + " kHz"; },
 			[](juce::String text) { return text.endsWith(" kHz") ?
-			text.dropLastCharacters(4).getFloatValue() * 1000.0 :
+			text.dropLastCharacters(4).getFloatValue() * 1000.0f :
 			text.dropLastCharacters(3).getFloatValue(); }
 		);
 
@@ -183,7 +184,7 @@ Gainrev2AudioProcessor::Gainrev2AudioProcessor()
 	{
 		mBands[i].magnitudes.resize(mFrequencies.size(), 1.0); // check here if error, different magnitudes
 
-		mState.addParameterListener(getTypeParamName(i), this); //hey daniel, i remember we talked about this and i think you said something about doing it differently now? search in discord
+		mState.addParameterListener(getTypeParamName(i), this); 
 		mState.addParameterListener(getFrequencyParamName(i), this);
 		mState.addParameterListener(getQualityParamName(i), this);
 		mState.addParameterListener(getGainParamName(i), this);
@@ -444,10 +445,6 @@ void Gainrev2AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce
 		mWasBypassed = false;
 	}
 
-	juce::dsp::AudioBlock<float> ioBuffer(buffer);
-	juce::dsp::ProcessContextReplacing<float> context(ioBuffer);
-
-	mFilter.process(context);
 
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
@@ -466,7 +463,11 @@ void Gainrev2AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce
 
 		for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
 		{
-			channelData[sample] = channelData[sample] * juce::Decibels::decibelsToGain(mGain);
+			//channelData[sample] = channelData[sample] * juce::Decibels::decibelsToGain(mGain);
+			juce::dsp::AudioBlock<float> ioBuffer(buffer);
+			juce::dsp::ProcessContextReplacing<float> context(ioBuffer);
+
+			mFilter.process(context);
 		}
 
 		// ..do something to the data...

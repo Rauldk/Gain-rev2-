@@ -17,12 +17,11 @@
   ==============================================================================
 */
 
-//#pragma once
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-
 //[/Headers]
 
 
@@ -58,7 +57,7 @@ public:
 
 	void buttonClicked(juce::Button* b) override;
 
-	juce::Path mFrequencyResponse;
+	juce::Path bFrequencyResponse;
 
 	//==============================================================================
 	//[UserMethods]     -- You can add your own custom methods in this section.
@@ -85,16 +84,16 @@ private:
 	juce::GroupComponent bFrame;
 	juce::ComboBox bFilterType;
 
-	juce::Slider bFrequency;
-	juce::Slider bQuality;
-	juce::Slider bGain;
+	juce::Slider bFrequency{ juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow };
+	juce::Slider bQuality{ juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow };
+	juce::Slider bGain{ juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow };
 
-	juce::TextButton bSolo;
-	juce::TextButton bActivate;
+	juce::TextButton bSolo{ "S" };
+	juce::TextButton bActivate{ "A" };
 
-	juce::OwnedArray<juce::AudioProcessorValueTreeState::ComboBoxAttachment> mBoxAttachments;
-	juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> mAttachments;
-	juce::OwnedArray<juce::AudioProcessorValueTreeState::ButtonAttachment> mButtonAttachments;
+	juce::OwnedArray<juce::AudioProcessorValueTreeState::ComboBoxAttachment> bBoxAttachments;
+	juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> bAttachments;
+	juce::OwnedArray<juce::AudioProcessorValueTreeState::ButtonAttachment> bButtonAttachments;
 
 	//==============================================================================
 

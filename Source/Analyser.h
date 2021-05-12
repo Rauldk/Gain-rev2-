@@ -225,7 +225,7 @@ private:
 	{
 		const float infinity = -100.0f;
 		//figure out the straight line at 0.0f
-		return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 10.0f, bounds.getBottom()-100, bounds.getY()); 
+		return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 10.0f, bounds.getBottom(), bounds.getY()); 
 	}
 	//[UserVariables]   -- You can add your own custom variables in this section.
 	//[/UserVariables]
