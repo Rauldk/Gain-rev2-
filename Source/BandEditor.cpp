@@ -30,7 +30,7 @@ BandEditor::BandEditor(size_t i, Gainrev2AudioProcessor& p) : index(i), audioPro
     bFrequency.setTooltip("Filter's frequency");
 
     addAndMakeVisible(bQuality);
-    bAttachments.add(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.getPluginState(), audioProcessor.getGainParamName(index), bQuality));
+    bAttachments.add(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.getPluginState(), audioProcessor.getQualityParamName(index), bQuality));
     bQuality.setTooltip("Filter's steepness (Quality)");
 
     addAndMakeVisible(bGain);

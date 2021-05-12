@@ -47,7 +47,7 @@ Gainrev2AudioProcessorEditor::Gainrev2AudioProcessorEditor (Gainrev2AudioProcess
     auto size = audioProcessor.getSavedSize();
     setResizable(true, true);
     setSize(size.x, size.y);
-    setResizeLimits(800, 450, 2990, 1800);
+    setResizeLimits(1000, 680, 2560, 1440);
     
     updateFreqRespone();
 
@@ -173,7 +173,7 @@ void Gainrev2AudioProcessorEditor::resized()
     audioProcessor.setSavedSize({ getWidth(), getHeight() });
     mPlotFrame = getLocalBounds();
 
-    auto bandSpace = mPlotFrame.removeFromBottom(getHeight() / 2);
+    auto bandSpace = mPlotFrame.removeFromBottom(getHeight() / 3);
     auto width = juce::roundToInt(bandSpace.getWidth()) / (mBandEditor.size() + 1);
     
     for (auto* bandEditor : mBandEditor)

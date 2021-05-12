@@ -192,12 +192,12 @@ public:
 			//mPoint2D pos = mPath.getSplinePoint(i);
 			
 			//p.lineTo(bounds.getX() + factor * indexToX(i, minFreq), binToY(fftData[i], bounds));
-		for (int i = 0; i <= 96; i += 6) {
+		for (int i = 0; i < 90; i += 6) {
 			p.cubicTo(bounds.getX() + factor * indexToX(i , minFreq), binToY(fftData[i ], bounds),
 				bounds.getX() + factor * indexToX(i + 2, minFreq), binToY(fftData[i + 2], bounds),
 				bounds.getX() + factor * indexToX(i +4, minFreq), binToY(fftData[i+ 4], bounds));
 		}
-		for (int i = 96; i <= mAvger.getNumSamples(); i += 12) {
+		for (int i = 90; i <= mAvger.getNumSamples(); i += 12) {
 			p.cubicTo(bounds.getX() + factor * indexToX(i, minFreq), binToY(fftData[i], bounds),
 				bounds.getX() + factor * indexToX(i + 4, minFreq), binToY(fftData[i + 4], bounds),
 				bounds.getX() + factor * indexToX(i + 8, minFreq), binToY(fftData[i + 8], bounds));

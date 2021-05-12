@@ -179,7 +179,7 @@ private:
 
 	int mSolo = -1;
 
-	juce::Point<int> mEditorSize = { 900, 500 };
+	juce::Point<int> mEditorSize = { 1280, 800 };
 	
 	//==============================================================================
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Gainrev2AudioProcessor)

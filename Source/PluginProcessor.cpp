@@ -118,7 +118,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 
 		auto qltyParameter = std::make_unique<juce::AudioParameterFloat>(Gainrev2AudioProcessor::getQualityParamName(i),
 			prefix + TRANS("Quality"),
-			juce::NormalisableRange<float> {0.1f, 10.0f, 1.0f, std::log(0.5f) / std::log(0.9f / 9.9f)},
+			juce::NormalisableRange<float> {0.1f, 10.0f, 0.1f, std::log(0.1f) / std::log(0.9f / 9.9f)},
 			defaults[i].quality,
 			juce::String(),
 			juce::AudioProcessorParameter::genericParameter,
@@ -361,6 +361,7 @@ void Gainrev2AudioProcessor::prepareToPlay(double sampleRate, int samplesPerBloc
 {
 	// Use this method as the place to do any pre-playback
 	// initialisation that you need..
+	mSampleRate = sampleRate;
 
 	juce::dsp::ProcessSpec spec;
 
@@ -464,15 +465,15 @@ void Gainrev2AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce
 		for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
 		{
 			//channelData[sample] = channelData[sample] * juce::Decibels::decibelsToGain(mGain);
-			juce::dsp::AudioBlock<float> ioBuffer(buffer);
-			juce::dsp::ProcessContextReplacing<float> context(ioBuffer);
-
-			mFilter.process(context);
 		}
 
 		// ..do something to the data...
 		//visualiser.pushBuffer(buffer);
 	}
+	juce::dsp::AudioBlock<float> ioBuffer(buffer);
+	juce::dsp::ProcessContextReplacing<float> context(ioBuffer);
+
+	mFilter.process(context);
 	if (getActiveEditor() != nullptr)
 		mAnalyserOutput.addAudioData(buffer, 0, totalNumOutputChannels);
 }
