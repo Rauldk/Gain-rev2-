@@ -36,8 +36,17 @@ Gainrev2AudioProcessorEditor::Gainrev2AudioProcessorEditor (Gainrev2AudioProcess
     mGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);*/
     //mGainSlider.addListener(this);
 
+    //mName.setText("EQucer", juce::NotificationType::dontSendNotification);
+
     mFrame.setText("Output");
     mFrame.setTextLabelPosition(juce::Justification::centred);
+
+    mName.setText("EQucer", juce::NotificationType::dontSendNotification);
+    mName.setJustificationType(juce::Justification::centred);
+    mName.setFont(40.0f);
+
+    addAndMakeVisible(mName);
+    addAndMakeVisible(mBrandingFrame);
     addAndMakeVisible(mFrame);
     addAndMakeVisible(mGainSlider);
 
@@ -51,15 +60,13 @@ Gainrev2AudioProcessorEditor::Gainrev2AudioProcessorEditor (Gainrev2AudioProcess
     
     updateFreqRespone();
 
-    //setSize (1280, 720);
-
 #ifdef JUCE_OPENGL
     openGLContext.attachTo(*getTopLevelComponent());
 #endif // JUCE_OPENGL
 
     audioProcessor.addChangeListener(this);
 
-    juce::Timer::startTimerHz(30);
+    juce::Timer::startTimerHz(120);
     
 }
 
@@ -101,8 +108,10 @@ void Gainrev2AudioProcessorEditor::paint(juce::Graphics& g)
 
     juce::Graphics::ScopedSaveState state(g);
 
+    //auto background = juce::Colour(static_cast 53, 47, 47);
+    //g.setColour(background);
+    g.fillAll({static_cast<juce::uint8>(20),static_cast<juce::uint8>(20), static_cast<juce::uint8>(20)});
     //g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-    g.fillAll(juce::Colours::black);
 
     g.setFont(12.0f);
     g.setColour(juce::Colours::silver);
@@ -138,14 +147,17 @@ void Gainrev2AudioProcessorEditor::paint(juce::Graphics& g)
     g.setFont(16.0f);
 
     audioProcessor.createAnalyserPlot(mAnalyserPath, mPlotFrame, 20.0f, true);
-    g.setColour(inputColour);
-    g.drawFittedText("Input", mPlotFrame.reduced(8), juce::Justification::topRight, 1);
-    g.strokePath(mAnalyserPath, juce::PathStrokeType(1.0));
+    g.setColour(juce::Colours::grey);
+    g.strokePath(mAnalyserPath, juce::PathStrokeType(0.2f));
+    g.setColour(juce::Colours::grey.withAlpha(0.2f));
+    g.fillPath(mAnalyserPath);
+
 
     audioProcessor.createAnalyserPlot(mAnalyserPath, mPlotFrame, 20.0f, false);
-    g.setColour(outputColour);
-    g.drawFittedText("Output", mPlotFrame.reduced(8, 28), juce::Justification::topRight, 1);
-    g.strokePath(mAnalyserPath, juce::PathStrokeType(1.0));
+    g.setColour(juce::Colours::grey);
+    g.strokePath(mAnalyserPath, juce::PathStrokeType(1.0f));
+    g.setColour(juce::Colours::grey.withAlpha(0.2f));
+    g.fillPath(mAnalyserPath);
 
     for (size_t i = 0; i < audioProcessor.getNumBands(); ++i)
     {
@@ -180,13 +192,15 @@ void Gainrev2AudioProcessorEditor::resized()
     {
         bandEditor->setBounds(bandSpace.removeFromLeft(width));
     }
-
-    mFrame.setBounds(bandSpace.removeFromTop(bandSpace.getHeight() / 2));
+    mName.setBounds(bandSpace.removeFromBottom(bandSpace.getHeight() / 2));
+    //mBrandingFrame.setBounds(bandSpace.removeFromBottom(bandSpace.getHeight() / 2));
+    mFrame.setBounds(bandSpace.removeFromTop(bandSpace.getHeight()));
     //mGainSlider.setBounds(getWidth() - 80, getHeight() - 80, 80, 80);
+
     mGainSlider.setBounds(mFrame.getBounds().reduced(8));
 
     mPlotFrame.reduce(3, 3);
-    mBrandingFrame = bandSpace.reduced(5);
+    //mBrandingFrame = bandSpace.reduced(5);
 
     updateFreqRespone();
     
@@ -292,6 +306,22 @@ void Gainrev2AudioProcessorEditor::mouseDrag(const juce::MouseEvent& event)
         if (mDraggingGain)
             mBandEditor[mDraggingBand]->setGain(getGainForPos(event.position.getY(), (float)mPlotFrame.getY(), (float)mPlotFrame.getBottom()));
     }
+}
+
+void Gainrev2AudioProcessorEditor::mouseWheelMove(const juce::MouseEvent& event, const juce::MouseWheelDetails& wheel)
+{
+    //if (mPlotFrame.contains(event.x, event.y))
+    //{
+    //    //if(!juce::Component::isMouseButtonDown())
+    //    for (size_t i = 0; i < (size_t)mBandEditor.size(); ++i)
+    //    {
+    //        if (auto* band = audioProcessor.getBand(i))
+    //        {
+    //            if(std::abs(wheel.deltaY)>0)
+    //            (float)band->quality += wheel.deltaY;
+    //        }
+    //    }
+    //}
 }
 
 void Gainrev2AudioProcessorEditor::mouseDoubleClick(const juce::MouseEvent& event)

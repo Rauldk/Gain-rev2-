@@ -42,31 +42,31 @@ juce::String Gainrev2AudioProcessor::getBandID(size_t index)
 juce::StringArray Gainrev2AudioProcessor::getFilterTypeNames()
 {
 	return {
-		TRANS("No Filter"),
-		TRANS("High Pass"),
-		TRANS("1st High Pass"),
-		TRANS("Low Shelf"),
-		TRANS("Band Pass"),
-		TRANS("All Pass"),
-		TRANS("1st All Pass"),
-		TRANS("Notch"),
-		TRANS("Peak"),
-		TRANS("High Shelf"),
-		TRANS("1st Low Pass"),
-		TRANS("Low Pass")
+		"No Filter",
+		"High Pass",
+		"1st High Pass",
+		"Low Shelf",
+		"Band Pass",
+		"All Pass",
+		"1st All Pass",
+		"Notch",
+		"Peak",
+		"High Shelf",
+		"1st Low Pass",
+		"Low Pass"
 	};
 }
 
-std::vector<Gainrev2AudioProcessor::Band> createDefaultBands() //replace TRANS with translate()? or rather remove it completely
+std::vector<Gainrev2AudioProcessor::Band> createDefaultBands() 
 {
 	std::vector<Gainrev2AudioProcessor::Band> defaults;
 
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Lowest"), juce::Colours::antiquewhite, Gainrev2AudioProcessor::HighPass, 30.0f, 0.707f)); //why 0.707f??
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Low"), juce::Colours::brown, Gainrev2AudioProcessor::LowShelf, 250.0f, 0.707f));
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Low Mids"), juce::Colours::green, Gainrev2AudioProcessor::Peak, 500.0f, 0.707f));
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("High Mids"), juce::Colours::coral, Gainrev2AudioProcessor::Peak, 1000.0f, 0.707f));
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("High"), juce::Colours::orange, Gainrev2AudioProcessor::HighShelf, 5000.0f, 0.707f));
-	defaults.push_back(Gainrev2AudioProcessor::Band(TRANS("Highest"), juce::Colours::red, Gainrev2AudioProcessor::LowPass, 12000.0f, 0.707f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Lowest", juce::Colours::yellow, Gainrev2AudioProcessor::NoFilter, 30.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Low", juce::Colours::brown, Gainrev2AudioProcessor::LowShelf, 250.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Low Mids", juce::Colours::green, Gainrev2AudioProcessor::Peak, 500.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("High Mids", juce::Colours::coral, Gainrev2AudioProcessor::Peak, 1000.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("High", juce::Colours::orange, Gainrev2AudioProcessor::HighShelf, 5000.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Highest", juce::Colours::red, Gainrev2AudioProcessor::NoFilter, 12000.0f));
 
 	return defaults;
 }
@@ -80,16 +80,16 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 
 	{
 		auto param = std::make_unique<juce::AudioParameterFloat>(Gainrev2AudioProcessor::paramOutput,
-			TRANS("Output"),
+			"Output",
 			juce::NormalisableRange<float>(0.0f, 2.0f, 0.01f),
 			1.0f,
-			TRANS("Output Level"),
+			"Output Level",
 			juce::AudioProcessorParameter::genericParameter,
 			[](float value, int) {return juce::String(juce::Decibels::gainToDecibels(value), 1) + "dB"; }, //lambda function
 			[](juce::String text) {return juce::Decibels::decibelsToGain(text.dropLastCharacters(3).getFloatValue()); } //lambda function
 		);
 
-		auto group = std::make_unique<juce::AudioProcessorParameterGroup>("global", TRANS("Globals"), "|", std::move(param));
+		auto group = std::make_unique<juce::AudioProcessorParameterGroup>("global", "Globals", "|", std::move(param));
 		params.push_back(std::move(group));
 	}
 
@@ -98,12 +98,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 		auto prefix = "Q" + juce::String(i + 1) + ": ";
 
 		auto typeParameter = std::make_unique<juce::AudioParameterChoice>(Gainrev2AudioProcessor::getTypeParamName(i),
-			prefix + TRANS("Filter Type"),
+			prefix + "Filter Type",
 			Gainrev2AudioProcessor::getFilterTypeNames(),
 			defaults[i].type);
 
 		auto freqParameter = std::make_unique<juce::AudioParameterFloat>(Gainrev2AudioProcessor::getFrequencyParamName(i),
-			prefix + TRANS("Frequency"),
+			prefix + "Frequency",
 			juce::NormalisableRange<float> {20.0f, 20000.0f, 1.0f, std::log(0.5f) / std::log(980.0f / 19980.0f)},
 			defaults[i].frequency,
 			juce::String(),
@@ -117,7 +117,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 		);
 
 		auto qltyParameter = std::make_unique<juce::AudioParameterFloat>(Gainrev2AudioProcessor::getQualityParamName(i),
-			prefix + TRANS("Quality"),
+			prefix + "Quality",
 			juce::NormalisableRange<float> {0.1f, 10.0f, 0.1f, std::log(0.1f) / std::log(0.9f / 9.9f)},
 			defaults[i].quality,
 			juce::String(),
@@ -127,7 +127,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 		);
 
 		auto gainParameter = std::make_unique<juce::AudioParameterFloat>(Gainrev2AudioProcessor::getGainParamName(i),
-			prefix + TRANS("Gain"),
+			prefix + "Gain",
 			juce::NormalisableRange<float> {1.0f / maxGain, maxGain, 0.001f, std::log(0.5f) / std::log((1.0f - (1.0f / maxGain)) / (maxGain - (1.0f / maxGain)))},
 			defaults[i].gain,
 			juce::String(),
@@ -137,11 +137,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 		);
 
 		auto actvParameter = std::make_unique<juce::AudioParameterBool>(Gainrev2AudioProcessor::getActiveParamName(i),
-			prefix + TRANS("Active"),
+			prefix + "Active",
 			defaults[i].active,
 			juce::String(),
-			[](float value, int) {return value > 0.5f ? TRANS("active") : TRANS("bypassed"); },
-			[](juce::String text) {return text == TRANS("active"); }
+			[](float value, int) {return value > 0.5f ? "active" : "bypassed"; },
+			[](juce::String text) {return text == "active"; }
 		);
 
 		auto group = std::make_unique<juce::AudioProcessorParameterGroup>("band" + juce::String(i), defaults[i].name, "|",
@@ -424,7 +424,6 @@ void Gainrev2AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce
 {
 	juce::ScopedNoDenormals noDenormals;
 	juce::ignoreUnused(midiMessages);
-
 	auto totalNumInputChannels = getTotalNumInputChannels();
 	auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -467,8 +466,6 @@ void Gainrev2AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce
 			//channelData[sample] = channelData[sample] * juce::Decibels::decibelsToGain(mGain);
 		}
 
-		// ..do something to the data...
-		//visualiser.pushBuffer(buffer);
 	}
 	juce::dsp::AudioBlock<float> ioBuffer(buffer);
 	juce::dsp::ProcessContextReplacing<float> context(ioBuffer);
@@ -593,7 +590,7 @@ juce::String Gainrev2AudioProcessor::getBandName(size_t index) const
 {
 	if (juce::isPositiveAndBelow(index, mBands.size()))
 		return mBands[size_t(index)].name;
-	return TRANS("unknown");
+	return "unknown";
 }
 
 juce::Colour Gainrev2AudioProcessor::getBandColour(size_t index) const

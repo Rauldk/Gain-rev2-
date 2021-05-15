@@ -41,13 +41,13 @@ BandEditor::BandEditor(size_t i, Gainrev2AudioProcessor& p) : index(i), audioPro
     bSolo.addListener(this);
     bSolo.setColour(juce::TextButton::buttonColourId, juce::Colours::yellow);
     addAndMakeVisible(bSolo);
-    bSolo.setTooltip("Listen only through this filter (solo)");
+    bSolo.setTooltip("Solo");
 
     bActivate.setClickingTogglesState(true);
     bActivate.setColour(juce::TextButton::buttonColourId, juce::Colours::green);
     bButtonAttachments.add(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.getPluginState(), audioProcessor.getActiveParamName(index), bActivate));
     addAndMakeVisible(bActivate);
-    bActivate.setTooltip("Activate or deactivate this filter");
+    bActivate.setTooltip("Bypass");
 }
 
 BandEditor::~BandEditor()
@@ -65,7 +65,7 @@ void BandEditor::resized()
     bFilterType.setBounds(bounds.removeFromTop(20));
 
     auto freqBounds = bounds.removeFromBottom(bounds.getHeight() * 2 / 3);
-    bFrequency.setBounds(freqBounds.withTop(freqBounds.getY() + 10));
+    bFrequency.setBounds(freqBounds.withTop(freqBounds.getY() + 20));
 
     auto buttons = freqBounds.reduced(5).withHeight(20);
     bSolo.setBounds(buttons.removeFromLeft(20));

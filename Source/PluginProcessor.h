@@ -127,7 +127,7 @@ public:
 
 	struct Band {
 		Band(const juce::String& nameToUse, juce::Colour colourToUse, enum FilterType typeToUse,
-			float frequencyToUse, float qualityToUse, float gainToUse = 1.0f, bool shouldBeActive = true)
+			float frequencyToUse, float qualityToUse = 1.0f, float gainToUse = 1.0f, bool shouldBeActive = true)
 			: name(nameToUse),
 			colour(colourToUse),
 			type(typeToUse),

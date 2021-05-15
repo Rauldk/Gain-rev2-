@@ -89,7 +89,7 @@ private:
 	juce::Slider bGain{ juce::Slider::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxBelow };
 
 	juce::TextButton bSolo{ "S" };
-	juce::TextButton bActivate{ "A" };
+	juce::TextButton bActivate{ "B" };
 
 	juce::OwnedArray<juce::AudioProcessorValueTreeState::ComboBoxAttachment> bBoxAttachments;
 	juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> bAttachments;

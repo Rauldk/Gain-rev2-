@@ -39,6 +39,8 @@ public:
     void mouseMove(const juce::MouseEvent& event) override;
     void mouseDrag(const juce::MouseEvent& event) override;
 
+    void mouseWheelMove(const juce::MouseEvent& event, const juce::MouseWheelDetails& wheel) override;
+
     void mouseDoubleClick(const juce::MouseEvent& event) override;
     
 
@@ -57,7 +59,8 @@ private:
 
     juce::GroupComponent mFrame;
     juce::Rectangle<int> mPlotFrame;
-    juce::Rectangle<int> mBrandingFrame;
+    juce::GroupComponent mBrandingFrame;
+    juce::Label mName;
 
     juce::Path mFrequencyResponse;
     juce::Path mAnalyserPath;
