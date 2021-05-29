@@ -127,8 +127,8 @@ private:
 
 	inline float binToY(float bin, const juce::Rectangle<float> bounds) const
 	{
-		const float infinity = -100.0f;
-		return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 10.0f, bounds.getBottom(), bounds.getY()); 
+		const float infinity = -120.0f;
+		return juce::jmap(juce::Decibels::gainToDecibels(bin, infinity), infinity, 30.0f, bounds.getBottom(), bounds.getY()); 
 	}
 
 	juce::dsp::FFT mFFT{ 12 };

@@ -61,12 +61,12 @@ std::vector<Gainrev2AudioProcessor::Band> createDefaultBands()
 {
 	std::vector<Gainrev2AudioProcessor::Band> defaults;
 
-	defaults.push_back(Gainrev2AudioProcessor::Band("Lowest", juce::Colours::yellow, Gainrev2AudioProcessor::NoFilter, 30.0f));
-	defaults.push_back(Gainrev2AudioProcessor::Band("Low", juce::Colours::brown, Gainrev2AudioProcessor::LowShelf, 250.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Lowest", juce::Colours::yellow, Gainrev2AudioProcessor::LowShelf, 30.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Low", juce::Colours::brown, Gainrev2AudioProcessor::Peak, 250.0f));
 	defaults.push_back(Gainrev2AudioProcessor::Band("Low Mids", juce::Colours::green, Gainrev2AudioProcessor::Peak, 500.0f));
 	defaults.push_back(Gainrev2AudioProcessor::Band("High Mids", juce::Colours::coral, Gainrev2AudioProcessor::Peak, 1000.0f));
-	defaults.push_back(Gainrev2AudioProcessor::Band("High", juce::Colours::orange, Gainrev2AudioProcessor::HighShelf, 5000.0f));
-	defaults.push_back(Gainrev2AudioProcessor::Band("Highest", juce::Colours::red, Gainrev2AudioProcessor::NoFilter, 12000.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("High", juce::Colours::orange, Gainrev2AudioProcessor::Peak, 5000.0f));
+	defaults.push_back(Gainrev2AudioProcessor::Band("Highest", juce::Colours::red, Gainrev2AudioProcessor::HighShelf, 12000.0f));
 
 	return defaults;
 }

@@ -39,7 +39,7 @@ BandEditor::BandEditor(size_t i, Gainrev2AudioProcessor& p) : index(i), audioPro
 
     bSolo.setClickingTogglesState(true);
     bSolo.addListener(this);
-    bSolo.setColour(juce::TextButton::buttonColourId, juce::Colours::yellow);
+    bSolo.setColour(juce::TextButton::buttonColourId, juce::Colours::brown);
     addAndMakeVisible(bSolo);
     bSolo.setTooltip("Solo");
 
